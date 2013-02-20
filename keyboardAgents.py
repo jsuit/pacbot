@@ -26,6 +26,7 @@ class KeyboardAgent(Agent):
     self.lastMove = Directions.STOP
     self.index = index
     self.keys = []
+    self.singleStep = True
     
   def getAction( self, state):
     from graphicsUtils import keys_waiting
@@ -37,16 +38,16 @@ class KeyboardAgent(Agent):
     legal = state.getLegalActions(self.index)
     move = self.getMove(legal)
     
-    if move == Directions.STOP:
+    if self.singleStep == False and move == Directions.STOP:
       # Try to move in the same direction as before
       if self.lastMove in legal:
         move = self.lastMove
-    
-    if (self.STOP_KEY in self.keys) and Directions.STOP in legal: move = Directions.STOP
+
+    if (self.STOP_KEY in keys) and Directions.STOP in legal: move = Directions.STOP
 
     if move not in legal:
       move = random.choice(legal)
-      
+    
     self.lastMove = move
     return move
 
@@ -56,6 +57,9 @@ class KeyboardAgent(Agent):
     if   (self.EAST_KEY in self.keys or 'Right' in self.keys) and Directions.EAST in legal: move = Directions.EAST
     if   (self.NORTH_KEY in self.keys or 'Up' in self.keys) and Directions.NORTH in legal:   move = Directions.NORTH
     if   (self.SOUTH_KEY in self.keys or 'Down' in self.keys) and Directions.SOUTH in legal: move = Directions.SOUTH
+    
+    if self.singleStep:
+      self.keys = []
     return move
   
 class KeyboardAgent2(KeyboardAgent):
