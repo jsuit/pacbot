@@ -34,10 +34,8 @@ class KeyboardAgent(Agent):
     keys = keys_waiting() + keys_pressed()
     if keys != []:
       self.keys = keys
-    
     legal = state.getLegalActions(self.index)
     move = self.getMove(legal)
-    
     if self.singleStep == False and move == Directions.STOP:
       # Try to move in the same direction as before
       if self.lastMove in legal:
